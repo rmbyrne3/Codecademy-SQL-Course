@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="/Users/RByrne/Documents/Personal/Coding/SQL/sql-population-queries-part-ii-solution/db.sqlite" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="1224"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,9:maincountries"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1">
+-- How many entries in the database are from Africa? 
+SELECT COUNT(*) AS 'Countries from Africa' FROM countries
+	WHERE continent = 'Africa';
+-- 56
+	
+-- What was the total population of Oceania in 2005?
+SELECT ROUND(SUM(population), 2) AS 'Total Population (in millions)'
+FROM population_years
+	INNER JOIN countries
+		ON countries.id = population_years.country_id
+	WHERE continent = 'Oceania'
+	AND year = 2005;
+-- 32.66
+
+-- What is the average population of countries in South America in 2003?
+SELECT ROUND(AVG(population), 2) AS 'Average Population (in millions)'
+FROM population_years
+	INNER JOIN countries
+		ON countries.id = population_years.country_id
+	WHERE continent = 'South America'
+	AND year = 2003;
+-- 25.89
+
+-- What country had the smallest population in 2007?
+SELECT population, name
+FROM population_years
+	INNER JOIN countries
+		ON population_years.country_id = countries.id
+	WHERE year = 2007
+	AND population IS NOT NULL
+	ORDER BY population ASC
+	LIMIT 1;
+-- 0.00216 | Niue
+
+-- What is the average population of Poland during the time period covered by this dataset?
+SELECT ROUND(AVG(population), 2) AS 'Avg Population (in millions)', name
+FROM population_years
+	INNER JOIN countries
+		ON population_years.country_id = countries.id
+	WHERE name = 'Poland';
+-- 38.56 | Poland
+
+-- How many countries have the word &quot;The&quot; in their name?
+SELECT COUNT(*) AS 'Countries with &quot;The&quot; in name'
+FROM countries
+	WHERE name LIKE '%the%';
+-- 4
+
+-- What was the total population of each continent in 2010?
+SELECT continent, ROUND(SUM(population), 3) AS 'Total Population (in millions)'
+FROM population_years
+	JOIN countries
+		ON population_years.country_id = countries.id
+	GROUP BY continent;
+-- Africa | 9972.253
+-- Asia | 43060.628
+-- Europe | 7991.482
+-- North America | 5643.757
+-- Oceania | 359.478
+-- South America | 4096.114
+</sql><current_tab id="0"/></tab_sql></sqlb_project>
